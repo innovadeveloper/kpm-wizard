@@ -43,7 +43,7 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
 
                     Header {
                         image = "compose-logo.svg"
-                        title = "Compose Multiplatform Wizard"
+                        title = "Compose Multiplatform Wizard (Abexa)"
                     }
 
                     val default = DefaultComposeAppInfo()
@@ -92,7 +92,7 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
                         }
                         TargetButton {
                             title = "iOS"
-                            isSelected = platforms.contains(Ios)
+                            isSelected = false  // platforms.contains(Ios)
                             onClick = { switch(Ios) }
                             icon = Apple
                         }
@@ -102,20 +102,20 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
                             onClick = { switch(Jvm) }
                             icon = Laptop
                         }
-                        TargetButton {
-                            title = "Browser (Wasm)"
-                            isSelected = platforms.contains(Wasm)
-                            onClick = { switch(Wasm) }
-                            icon = Language
-                            status = "Alpha (some libraries don't support it yet)"
-                        }
-                        TargetButton {
-                            title = "Browser (JS)"
-                            isSelected = platforms.contains(Js)
-                            onClick = { switch(Js) }
-                            icon = Language
-                            status = "Experimental"
-                        }
+//                        TargetButton {
+//                            title = "Browser (Wasm)"
+//                            isSelected = false  // platforms.contains(Wasm)
+//                            onClick = { switch(Wasm) }
+//                            icon = Language
+//                            status = "Alpha (some libraries don't support it yet)"
+//                        }
+//                        TargetButton {
+//                            title = "Browser (JS)"
+//                            isSelected = false  // platforms.contains(Js)
+//                            onClick = { switch(Js) }
+//                            icon = Language
+//                            status = "Experimental"
+//                        }
                     }
 
                     VersionsTable {
@@ -127,16 +127,16 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
 
                     val deps = setOf(
                         DependencyBox(listOf(Kermit, Napier), false),
-                        DependencyBox(KotlinxCoroutinesCore, false),
-                        DependencyBox(KtorCore, false),
-                        DependencyBox(AndroidxLifecycleViewmodel, false),
+                        DependencyBox(KotlinxCoroutinesCore, true),
+                        DependencyBox(KtorCore, true),
+                        DependencyBox(AndroidxLifecycleViewmodel, true),
                         DependencyBox(listOf(AndroidxNavigation, Voyager, Decompose, PreCompose), false),
-                        DependencyBox(KotlinxSerializationJson, false),
-                        DependencyBox(listOf(Koin, Kodein), false),
+                        DependencyBox(KotlinxSerializationJson, true),
+                        DependencyBox(listOf(Koin, Kodein), true),
                         DependencyBox(listOf(Coil, ImageLoader), false),
-                        DependencyBox(MultiplatformSettings, false),
+                        DependencyBox(MultiplatformSettings, true),
                         DependencyBox(KotlinxDateTime, false),
-                        DependencyBox(listOf(SQLDelightPlugin, RoomPlugin), false),
+                        DependencyBox(listOf(SQLDelightPlugin, RoomPlugin), true),
                         DependencyBox(ApolloPlugin, false),
                         DependencyBox(KStore, false),
                         DependencyBox(listOf(BuildConfigPlugin, BuildKonfigPlugin), false),

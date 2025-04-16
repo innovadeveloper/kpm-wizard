@@ -40,78 +40,77 @@ val TopMenu = FC<Props> {
                 }
             }
 
-            when (wizardType) {
-                WizardType.ComposeApp -> IconButton {
-                    onClick = {
-                        window.open("https://www.jetbrains.com/lp/compose-multiplatform/")
-                    }
-                    title = "View compose documentation"
-                    MenuBook()
-                }
-
-                WizardType.KmpLibrary -> IconButton {
-                    onClick = {
-                        window.open("https://kotlinlang.org/docs/multiplatform-get-started.html")
-                    }
-                    title = "View KMP documentation"
-                    MenuBook()
-                }
-            }
-
-            IconButton {
-                onClick = {
-                    window.open("https://github.com/terrakok/Compose-Multiplatform-Wizard")
-                }
-                title = "Fork me on GitHub"
-                GitHub()
-            }
-
-            IconButton {
-                onClick = {
-                    theme = if (theme == Themes.Light) Themes.Dark else Themes.Light
-                }
-                if (theme == Themes.Light) {
-                    title = "Use dark theme"
-                    Brightness7()
-                } else {
-                    title = "Use light theme"
-                    Brightness4()
-                }
-            }
-
-            IconButton {
-                onClick = {
-                    window.open("https://github.com/terrakok/kmp-awesome#contents")
-                }
-                title = "More KMP libraries"
-                Diamond()
-            }
-
-            when (wizardType) {
-                WizardType.ComposeApp -> IconButton {
-                    onClick = {
-                        window.open("https://terrakok.github.io/kmp-web-wizard/")
-                    }
-                    title = "KMP Library Wizard"
-                    ReactHTML.img {
-                        src = "kotlin-logo.svg"
-                        width = 24.0
-                        height = 24.0
-                    }
-                }
-
-                WizardType.KmpLibrary -> IconButton {
-                    onClick = {
-                        window.open("https://terrakok.github.io/Compose-Multiplatform-Wizard/")
-                    }
-                    title = "Compose Multiplatform Wizard"
-                    ReactHTML.img {
-                        src = "compose-logo.svg"
-                        width = 24.0
-                        height = 24.0
-                    }
-                }
-            }
+//            when (wizardType) {
+//                WizardType.ComposeApp -> IconButton {
+//                    onClick = {
+//                        window.open("https://www.jetbrains.com/lp/compose-multiplatform/")
+//                    }
+//                    title = "View compose documentation"
+//                    MenuBook()
+//                }
+//
+//                WizardType.KmpLibrary -> IconButton {
+//                    onClick = {
+//                        window.open("https://kotlinlang.org/docs/multiplatform-get-started.html")
+//                    }
+//                    title = "View KMP documentation"
+//                    MenuBook()
+//                }
+//            }
+//            IconButton {
+//                onClick = {
+//                    window.open("https://github.com/terrakok/Compose-Multiplatform-Wizard")
+//                }
+//                title = "Fork me on GitHub"
+//                GitHub()
+//            }
+//
+//            IconButton {
+//                onClick = {
+//                    theme = if (theme == Themes.Light) Themes.Dark else Themes.Light
+//                }
+//                if (theme == Themes.Light) {
+//                    title = "Use dark theme"
+//                    Brightness7()
+//                } else {
+//                    title = "Use light theme"
+//                    Brightness4()
+//                }
+//            }
+//
+//            IconButton {
+//                onClick = {
+//                    window.open("https://github.com/terrakok/kmp-awesome#contents")
+//                }
+//                title = "More KMP libraries"
+//                Diamond()
+//            }
+//
+//            when (wizardType) {
+//                WizardType.ComposeApp -> IconButton {
+//                    onClick = {
+//                        window.open("https://terrakok.github.io/kmp-web-wizard/")
+//                    }
+//                    title = "KMP Library Wizard"
+//                    ReactHTML.img {
+//                        src = "kotlin-logo.svg"
+//                        width = 24.0
+//                        height = 24.0
+//                    }
+//                }
+//
+//                WizardType.KmpLibrary -> IconButton {
+//                    onClick = {
+//                        window.open("https://terrakok.github.io/Compose-Multiplatform-Wizard/")
+//                    }
+//                    title = "Compose Multiplatform Wizard"
+//                    ReactHTML.img {
+//                        src = "compose-logo.svg"
+//                        width = 24.0
+//                        height = 24.0
+//                    }
+//                }
+//            }
         }
     }
 }
