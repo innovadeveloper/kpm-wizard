@@ -73,7 +73,8 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
                         }
                     }
 
-                    var platforms by useState(setOf(Android, Ios, Jvm, Wasm))
+//                    var platforms by useState(setOf(Android, Ios, Jvm, Wasm))
+                    var platforms by useState(setOf(Android, Jvm))
                     fun switch(platform: ProjectPlatform) {
                         platforms = if (platforms.contains(platform)) {
                             platforms - platform
