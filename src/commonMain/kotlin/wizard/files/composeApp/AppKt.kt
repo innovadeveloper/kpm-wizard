@@ -135,3 +135,29 @@ class AndroidAppKt(info: ProjectInfo) : ProjectFile {
         
     """.trimIndent()
 }
+
+
+class AndroidAppApplicationKt(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/AppApplication.android.kt"
+    override val content = """
+        package ${info.packageId}
+        
+        import android.app.Application
+        import android.content.Context
+        import ${info.packageId}.di.androidModule
+        import ${info.packageId}.di.initKoin
+        
+        class AppApplication : Application(){
+        
+            companion object{
+                lateinit var appContext : Context
+            }
+        
+            override fun onCreate() {
+                super.onCreate()
+                AppApplication.appContext = this
+                initKoin(androidModule(AppApplication.appContext))
+            }
+        }
+    """.trimIndent()
+}

@@ -89,7 +89,7 @@ class IosMainKt() : ProjectFile {
 }
 
 class JvmMainKt() : ProjectFile {
-    override val path = "sample/composeApp/src/jvmMain/kotlin/sample/app/main.kt"
+    override val path = "sample/composeApp/src/desktopMain/kotlin/sample/app/main.kt"
     override val content = """
         import androidx.compose.ui.unit.dp
         import androidx.compose.ui.window.Window

@@ -17,29 +17,34 @@ class SettingsGradleKts(info: ProjectInfo) : ProjectFile {
             |pluginManagement {
             |    repositories {
             |        google {
-            |            content { 
-            |              	includeGroupByRegex("com\\.android.*")
-            |              	includeGroupByRegex("com\\.google.*")
-            |              	includeGroupByRegex("androidx.*")
-            |              	includeGroupByRegex("android.*")
+            |            mavenContent {
+            |                includeGroupAndSubgroups("androidx")
+            |                includeGroupAndSubgroups("com.android")
+            |                includeGroupAndSubgroups("com.google")
             |            }
             |        }
-            |        gradlePluginPortal()
             |        mavenCentral()
+            |        gradlePluginPortal()
             |    }
             |}
             |
             |dependencyResolutionManagement {
             |    repositories {
             |        google {
-            |            content { 
-            |              	includeGroupByRegex("com\\.android.*")
-            |              	includeGroupByRegex("com\\.google.*")
-            |              	includeGroupByRegex("androidx.*")
-            |              	includeGroupByRegex("android.*")
+            |            mavenContent {
+            |                includeGroupAndSubgroups("androidx")
+            |                includeGroupAndSubgroups("com.android")
+            |                includeGroupAndSubgroups("com.google")
             |            }
             |        }
             |        mavenCentral()
+            |        maven {
+            |            url = uri("https://artifactory-service.abexa.pe/repository/android-libraries-releases/")
+            |            credentials {
+            |                username = "xxxxx"
+            |                password = "xxxxx"
+            |            }
+            |        }
             |    }
             |}
         """.trimMargin())

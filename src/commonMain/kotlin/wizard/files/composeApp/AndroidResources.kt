@@ -10,6 +10,7 @@ class AndroidManifest(info: ProjectInfo) : ProjectFile {
         <manifest xmlns:android="http://schemas.android.com/apk/res/android">
         
             <application
+                android:name=".AppApplication"
                 android:icon="@mipmap/ic_launcher"
                 android:label="${info.name}"
                 android:theme="@android:style/Theme.Material.NoActionBar">
@@ -29,3 +30,32 @@ class AndroidManifest(info: ProjectInfo) : ProjectFile {
         </manifest>
     """.trimIndent()
 }
+
+class SimpleAndroidManifest(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/AndroidManifest.xml"
+    override val content = """
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+        
+            <application
+                android:icon="@mipmap/ic_launcher"
+                android:label="${info.name}"
+                android:theme="@android:style/Theme.Material.NoActionBar">
+                <activity
+                    android:name=".AppActivity"
+                    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+                    android:launchMode="singleInstance"
+                    android:windowSoftInputMode="adjustPan"
+                    android:exported="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        
+        </manifest>
+    """.trimIndent()
+}
+
+

@@ -1,6 +1,9 @@
 package wizard
 
+import wizard.dependencies.AndroidxLifecycleViewmodel
 import wizard.dependencies.ApolloPlugin
+import wizard.dependencies.Koin
+import wizard.dependencies.SQLDelightPlugin
 import wizard.files.*
 import wizard.files.composeApp.*
 
@@ -33,16 +36,59 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
     add(StringsXml(info))
     add(IndieFlowerTtf(info))
 
+    // para todas las plataformas se creará la siguiente estructura sin excepción
+    addAll(cleanArchitectureForViewModel(info))
+    if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(Koin)) {
+        add(CommonAbstractScreen(info))
+        add(CommonAbstractViewModel(info))
+        add(CommonCounterScreen(info))
+        add(CommonCounterViewModel(info))
+
+        // sqldelight
+        add(CommonDatabaseDriverFactoryExpect(info))
+        add(CommonDBDriver(info))
+        add(CommonSchemasSQLDelight(info))
+        add(CommonUsersSQLDelight(info))
+        add(CommonOrdersSQLDelight(info))
+
+        // koin
+//        com.abexa.kmp.di.qualifiers
+        add(CommonServiceKoinQualifier(info))
+        add(CommonNetworkKoinQualifier(info))
+        add(CommonKoinInit(info))
+        add(CommonKoinService(info))
+        add(CommonHTTPGenericProvider(info))
+        add(CommonPreferencesSPF(info))
+        add(CommonPreferencesConfig(info))
+        add(CommonNetworkIdentityServerAPI(info))
+        add(CommonConstants(info))
+        add(CommonAccessTokenDTO(info))
+        add(CommonRequestTokenDTO(info))
+        add(CommonAppParamsDTO(info))
+        add(CommonExtensions(info))
+
+        add(CommonExtensions(info))
+        add(CommonExtensions(info))
+
+
+    }
+
+
     if (info.dependencies.contains(ApolloPlugin)) {
         add(GraphQLSchema(info))
         add(GraphQLQuery(info))
     }
 
     if (info.hasPlatform(ProjectPlatform.Android)) {
-        add(AndroidManifest(info))
+        add(SimpleAndroidManifest(info))
         addAll(AndroidAppIcons(info))
         add(AndroidAppKt(info))
         add(AndroidThemeKt(info))
+
+        if (info.dependencies.contains(AndroidxLifecycleViewmodel) && info.dependencies.contains(Koin)) {
+            add(AndroidManifest(info))
+            add(AndroidAppApplicationKt(info))
+        }
     }
 
     if (info.hasPlatform(ProjectPlatform.Jvm)) {

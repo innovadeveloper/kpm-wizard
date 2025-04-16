@@ -119,7 +119,7 @@ class ThemeKt(info: ProjectInfo) : ProjectFile {
 }
 
 class DesktopThemeKt(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/jvmMain/kotlin/${info.packagePath}/theme/Theme.jvm.kt"
+    override val path = "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/theme/Theme.jvm.kt"
     override val content = """
         package ${info.packageId}.theme
 
