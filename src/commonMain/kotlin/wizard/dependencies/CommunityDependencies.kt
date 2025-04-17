@@ -190,3 +190,29 @@ val BuildKonfigPlugin = Dependency(
     catalogName = "buildKonfig",
     platforms = emptySet()
 )
+//sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+//ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+//ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+val KspPlugin = Dependency(
+    title = "KSP",
+    description = "Kotlin Symbol Processing API, a lightweight compiler plugin API.",
+    url = "https://github.com/google/ksp",
+    group = "com.google.devtools.ksp",
+    id = "gradle-plugin",
+    version = "2.0.20-1.0.25",
+    catalogVersionName = "ksp",
+    catalogName = "ksp",
+    platforms = emptySet()
+)
+
+val KtorfitPlugin = Dependency(
+    title = "Ktorfit",
+    description = "Kotlin multiplatform HTTP client inspired by Retrofit and powered by Ktor.",
+    url = "https://github.com/Foso/Ktorfit",
+    group = "de.jensklingenberg.ktorfit",
+    id = "gradle-plugin",
+    version = "2.1.0",
+    catalogVersionName = "ktorfit",
+    catalogName = "ktorfit",
+    platforms = emptySet()
+)

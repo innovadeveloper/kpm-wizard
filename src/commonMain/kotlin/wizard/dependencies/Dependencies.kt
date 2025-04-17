@@ -115,6 +115,9 @@ val AndroidxLifecycleViewmodel = AndroidxLifecycleRuntime.copy(
     platforms = emptySet()
 )
 
+
+
+
 val AndroidxNavigation = Dependency(
     title = "Androidx Navigation",
     description = "Navigation is a framework for navigating between 'destinations' within an Compose multiplatform application",

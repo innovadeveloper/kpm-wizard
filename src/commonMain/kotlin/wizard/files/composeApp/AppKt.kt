@@ -2,6 +2,27 @@ package wizard.files.composeApp
 
 import wizard.*
 
+class CommonAppKoin(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
+    override val content = """
+package ${info.packageId}
+
+    import androidx.compose.material3.MaterialTheme
+    import androidx.compose.runtime.*
+    import org.jetbrains.compose.ui.tooling.preview.Preview
+    import ${info.packageId}.ui.screen.counter.CounterScreenClass
+    import ${info.packageId}.ui.screen.counter.CounterViewModel
+    
+    @Composable
+    @Preview
+    fun App() {
+        MaterialTheme {
+            CounterScreenClass().build<CounterViewModel>()
+        }
+    }
+    """.trimIndent()
+}
+
 class AppKt(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
     override val content = """
@@ -158,6 +179,60 @@ class AndroidAppApplicationKt(info: ProjectInfo) : ProjectFile {
                 AppApplication.appContext = this
                 initKoin(androidModule(AppApplication.appContext))
             }
+        }
+    """.trimIndent()
+}
+
+
+class AndroidDatabaseDriverFactoryKt(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/db/DatabaseDriverFactory.android.kt"
+    override val content = """
+        package ${info.packageId}.data.db
+        
+        import android.content.Context
+        import app.cash.sqldelight.db.SqlDriver
+        import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+        import ${info.packageId}.db.MyDatabase
+        
+        actual class DatabaseDriverFactory(private val context: Context) : DBDriver {
+            actual override fun createDriver(): SqlDriver {
+                return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
+            }
+        }
+    """.trimIndent()
+}
+
+class AndroidPreferencesConfigKt(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/spf/PreferencesConfig.android.kt"
+    override val content = """
+        package ${info.packageId}.data.spf
+        
+        import android.content.Context
+        import ${info.packageId}.AppApplication
+        import ${info.packageId}.domain.constants.Constants
+        import com.russhwolf.settings.Settings
+        import com.russhwolf.settings.SharedPreferencesSettings
+        
+        actual fun provideSettings(): Settings {
+            val sharedPreferences = AppApplication.appContext.getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+            return SharedPreferencesSettings(sharedPreferences)
+        }
+    """.trimIndent()
+}
+
+class AndroidKoinModuleKt(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/di/AndroidKoinModule.kt"
+    override val content = """
+        package ${info.packageId}.di
+        
+        import android.content.Context
+        import ${info.packageId}.data.db.DBDriver
+        import ${info.packageId}.data.db.DatabaseDriverFactory
+        import org.koin.dsl.module
+        
+        fun androidModule(context: Context) = module {
+            single { "Soy un servicio Android específico" }
+            single<DBDriver> { DatabaseDriverFactory(context) }
         }
     """.trimIndent()
 }

@@ -21,7 +21,7 @@ val KtorCore = Dependency(
     url = "https://github.com/ktorio/ktor",
     group = "io.ktor",
     id = "ktor-client-core",
-    version = "3.0.3",
+    version = "3.1.2",
     catalogVersionName = "ktor",
     catalogName = "ktor-client-core",
     platforms = emptySet()
@@ -42,6 +42,24 @@ val KtorClientLogging = KtorCore.copy(
 val KtorClientSerialization = KtorCore.copy(
     id = "ktor-client-serialization",
     catalogName = "ktor-client-serialization",
+    platforms = emptySet()
+)
+
+val Ktorfit = Dependency(
+    title = "Ktorfit",
+    description = "The Lifecycle library offers built-in APIs that let you integrate with Compose Multiplatform.",
+    url = "https://developer.android.com/topic/libraries/architecture/lifecycle",
+    group = "de.jensklingenberg.ktorfit",
+    id = "ktorfit-lib",
+    version = "2.1.0",
+    catalogVersionName = "ktorfit-lib",
+    catalogName = "ktorfit-lib",
+    platforms = emptySet()
+)
+
+val KtorSerializationJSON = KtorCore.copy(
+    id = "ktor-serialization-kotlinx-json",
+    catalogName = "ktor-serialization-kotlinx-json",
     platforms = emptySet()
 )
 

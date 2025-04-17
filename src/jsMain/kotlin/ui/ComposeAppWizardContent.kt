@@ -131,6 +131,7 @@ val ComposeAppWizardContent = FC<AppProps> { props ->
                         DependencyBox(KotlinxCoroutinesCore, true),
                         DependencyBox(KtorCore, true),
                         DependencyBox(AndroidxLifecycleViewmodel, true),
+//                        DependencyBox(Ktorfit, true),
                         DependencyBox(listOf(AndroidxNavigation, Voyager, Decompose, PreCompose), false),
                         DependencyBox(KotlinxSerializationJson, true),
                         DependencyBox(listOf(Koin, Kodein), true),
@@ -224,7 +225,11 @@ internal fun Set<DependencyBox>.getSelectedDependencies() =
                     KtorClientOkhttp,
                     KtorClientJs,
                     KtorClientLinux,
-                    KtorClientMingw
+                    KtorClientMingw,
+                    Ktorfit,
+                    KtorSerializationJSON,
+                    KtorfitPlugin,
+                    KspPlugin
                 )
                 SQLDelightPlugin -> listOf(
                     SQLDelightPlugin,

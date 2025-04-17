@@ -41,7 +41,7 @@ fun ProjectInfo.getResourcesPackage(): String = "$safeName.$moduleName.generated
     .lowercase().replace('-', '_')
 
 fun DefaultComposeAppInfo() = ProjectInfo(
-    packageId = "org.company.app",
+    packageId = "com.abexa.wizard",
     //Shouldn't be "ComposeApp" because it breaks ios build. The reason is kotlin framework name is "ComposeApp"
     name = "Multiplatform App",
     moduleName = "composeApp",

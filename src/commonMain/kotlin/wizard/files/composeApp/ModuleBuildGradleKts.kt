@@ -56,7 +56,7 @@ class ModuleBuildGradleKts(info: ProjectInfo) : ProjectFile {
             appendLine("")
         }
         if (info.hasPlatform(ProjectPlatform.Jvm)) {
-            appendLine("    jvm()")
+            appendLine("    jvm(\"desktop\")")
             appendLine("")
         }
         if (info.hasPlatform(ProjectPlatform.Js)) {
@@ -87,6 +87,8 @@ class ModuleBuildGradleKts(info: ProjectInfo) : ProjectFile {
             appendLine("")
         }
         appendLine("    sourceSets {")
+        if(info.hasPlatform(ProjectPlatform.Jvm))
+            appendLine("        val desktopMain by getting")
         appendLine("        commonMain.dependencies {")
         appendLine("            implementation(compose.runtime)")
         appendLine("            implementation(compose.foundation)")
@@ -123,7 +125,7 @@ class ModuleBuildGradleKts(info: ProjectInfo) : ProjectFile {
             appendLine("")
         }
         if (info.hasPlatform(ProjectPlatform.Jvm)) {
-            appendLine("        jvmMain.dependencies {")
+            appendLine("        desktopMain.dependencies {")
             appendLine("            implementation(compose.desktop.currentOs)")
 
             otherDeps.forEach { dep ->

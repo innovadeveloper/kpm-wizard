@@ -6,7 +6,7 @@ import wizard.ProjectInfo
 class DesktopMainKt(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/desktopMain/kotlin/main.kt"
     override val content = """
-        import androidx.compose.desktop.ui.tooling.preview.Preview
+        import org.jetbrains.compose.ui.tooling.preview.Preview
         import androidx.compose.runtime.Composable
         import androidx.compose.ui.unit.dp
         import androidx.compose.ui.window.Window

@@ -50,6 +50,7 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         add(CommonSchemasSQLDelight(info))
         add(CommonUsersSQLDelight(info))
         add(CommonOrdersSQLDelight(info))
+        add(CommonDBRepository(info))
 
         // koin
 //        com.abexa.kmp.di.qualifiers
@@ -61,6 +62,7 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         add(CommonPreferencesSPF(info))
         add(CommonPreferencesConfig(info))
         add(CommonNetworkIdentityServerAPI(info))
+        add(CommonNetworkAnotherServerAPI(info))
         add(CommonConstants(info))
         add(CommonAccessTokenDTO(info))
         add(CommonRequestTokenDTO(info))
@@ -69,6 +71,7 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
 
         add(CommonExtensions(info))
         add(CommonExtensions(info))
+        add(CommonAppKoin(info))
 
 
     }
@@ -85,9 +88,12 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         add(AndroidAppKt(info))
         add(AndroidThemeKt(info))
 
-        if (info.dependencies.contains(AndroidxLifecycleViewmodel) && info.dependencies.contains(Koin)) {
+        if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(AndroidxLifecycleViewmodel) && info.dependencies.contains(Koin)) {
             add(AndroidManifest(info))
             add(AndroidAppApplicationKt(info))
+            add(AndroidKoinModuleKt(info))
+            add(AndroidDatabaseDriverFactoryKt(info))
+            add(AndroidPreferencesConfigKt(info))
         }
     }
 
@@ -95,6 +101,13 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         add(DesktopMainKt(info))
         add(DesktopThemeKt(info))
         addAll(DesktopAppIcons(info))
+
+        if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(Koin)) {
+            add(DesktopDatabaseDriverFactoryKt(info))
+            add(DesktopFileSettingsProviderKt(info))
+            add(DesktopPreferencesConfigKt(info))
+            add(DesktopKoinModuleKt(info))
+        }
     }
 
     if (info.hasPlatform(ProjectPlatform.Ios)) {

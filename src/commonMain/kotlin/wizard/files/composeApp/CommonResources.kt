@@ -110,8 +110,8 @@ package ${info.packageId}.ui.screen.counter
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -161,13 +161,13 @@ class CounterScreenClass : AbstractScreen<CounterViewModel, CounterViewModel.Cou
     @Composable
     fun customComposable(name: String) {
         println("customComposable recompuesto")
-        Text("Hola, $ name!")
+        Text("Hola, ${'$'}name!")
     }
 
     @Composable
     fun CounterText(count: Int) {
         println("CounterText recompuesto")
-        Text("Counter: $ count")
+        Text("Counter: ${'$'}count")
     }
 
     @Composable
@@ -179,7 +179,7 @@ class CounterScreenClass : AbstractScreen<CounterViewModel, CounterViewModel.Cou
     @Composable
     fun LoadingGreet(greet : String) {
         println("LoadingGreet recompuesto")
-        Text("greet $ greet")
+        Text("greet ${'$'}greet")
     }
 
     @Composable
@@ -208,8 +208,6 @@ class CommonCounterViewModel(info: ProjectInfo) : ProjectFile {
     override val content = """
 package ${info.packageId}.ui.screen.counter
 
-import ${info.packageId}.ui.screen.AbstractViewModel
-
 import ${info.packageId}.data.db.repositories.OrderRepository
 import ${info.packageId}.data.network.IdentityServerAPI
 import ${info.packageId}.data.spf.IPreferences
@@ -233,21 +231,21 @@ class CounterViewModel(private val preferences: IPreferences, private val identi
         get() = renderState.value
 
     suspend fun increment() {
-        appParamsDTO.alias = "$ {System.currentTimeMillis()} A"
+        appParamsDTO.alias = "${'$'}{System.currentTimeMillis()} A"
         val token = Base64.getEncoder().encodeToString("iGnYoHN2aAwPWTdWrWYkimwJY78a:1PMetOfkOscdVkKi4NIWitqUp7OMmd33nrjsj9DNQgQa".toByteArray())
         val requestBody = TokenRequest(grantType = "password", username = "xtu-mobile-app", password = "xtu-mobile-app", scope = "xtu-mobile.read xtu-mobile.write monitor-logging.read monitor-logging.write profile openid generic-notifier.read generic-notifier.write")
         val (accessToken2, error2) = safeCallAsPair<AccessTokenDTO>{
-            identityServerAPI.sendData2(request = requestBody, token = "Basic $ token")
+            identityServerAPI.sendData2(request = requestBody, token = "Basic ${'$'}token")
         }
 
-//        client.sendData2(request = requestBody, contentType = "application/json", token = "Basic $ token").
-        println("token rsponse $ {accessToken2} $ error2")
+//        client.sendData2(request = requestBody, contentType = "application/json", token = "Basic ${'$'}token").
+        println("token rsponse ${'$'}{accessToken2} ${'$'}error2")
 
         val users = orderRepository.getAllUsers()
-        orderRepository.insertUser("Kane BA", "email$ {System.currentTimeMillis()}@.com")
+        orderRepository.insertUser("Kane BA", "email${'$'}{System.currentTimeMillis()}@.com")
         val users2 = orderRepository.getAllUsers()
-        println("$ users , $ users2")
-//        println("token rsponse $ {accessToken} $ error")
+        println("${'$'}users , ${'$'}users2")
+//        println("token rsponse ${'$'}{accessToken} ${'$'}error")
 //        val response = httpClient.get("characters").body<CharacterResponse>()
         preferences.counter += 1
         super.updateState(renderStateValue.copy(count = preferences.counter))
@@ -260,7 +258,7 @@ class CounterViewModel(private val preferences: IPreferences, private val identi
     }
 
     fun greet() {
-        super.updateState(renderStateValue.copy(message = "M.$ {System.currentTimeMillis()}"))
+        super.updateState(renderStateValue.copy(message = "M.${'$'}{System.currentTimeMillis()}"))
     }
 
     data class CounterUiState(
@@ -306,14 +304,14 @@ class CommonDBRepository(info: ProjectInfo) : ProjectFile {
     override val content = """
 package ${info.packageId}.data.db.repositories
 
-import ${info.packageId}.MyDB
+import ${info.packageId}.db.MyDatabase
 import ${info.packageId}.data.db.DBDriver
 import ${info.packageId}.Users
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class OrderRepository(dbDriver: DBDriver) {
-    private val database = MyDB(dbDriver.createDriver())
+    private val database = MyDatabase(dbDriver.createDriver())
 
     private val userQueries = database.usersQueries
     private val orderQueries = database.ordersQueries
@@ -496,7 +494,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-data class NetworkException(val statusCode : Int, val error : String) : Exception("API Error $ statusCode: $ error")
+data class NetworkException(val statusCode : Int, val error : String) : Exception("API Error ${'$'}statusCode: ${'$'}error")
 
 interface IKtorfitProvider{
     fun create() : Ktorfit
@@ -529,7 +527,7 @@ class HTTPGenericProvider (val baseUrl: String, val appParamsDTO: AppParamsDTO) 
                 level = LogLevel.ALL
                 logger = object : Logger {
                     override fun log(message: String) {
-                        println("KtorLog => $ message") // Esto se verá en consola/logcat
+                        println("KtorLog => ${'$'}message") // Esto se verá en consola/logcat
                     }
                 }
             }
