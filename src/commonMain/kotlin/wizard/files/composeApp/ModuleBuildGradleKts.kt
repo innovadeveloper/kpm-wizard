@@ -159,6 +159,17 @@ class ModuleBuildGradleKts(info: ProjectInfo) : ProjectFile {
             appendLine("        }")
             appendLine("")
         }
+        if(commonDeps.contains(Ktorfit))
+        {
+            /**
+             * val commonMain by getting {
+             *             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+             *         }
+             */
+            appendLine("        val commonMain by getting {")
+            appendLine("            kotlin.srcDir(\"build/generated/ksp/metadata/commonMain/kotlin\")")
+            appendLine("        }")
+        }
         appendLine("    }")
         appendLine("}")
 

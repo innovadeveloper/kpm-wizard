@@ -88,7 +88,10 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         add(AndroidAppKt(info))
         add(AndroidThemeKt(info))
 
-        if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(AndroidxLifecycleViewmodel) && info.dependencies.contains(Koin)) {
+        if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(
+                AndroidxLifecycleViewmodel
+            ) && info.dependencies.contains(Koin)
+        ) {
             add(AndroidManifest(info))
             add(AndroidAppApplicationKt(info))
             add(AndroidKoinModuleKt(info))

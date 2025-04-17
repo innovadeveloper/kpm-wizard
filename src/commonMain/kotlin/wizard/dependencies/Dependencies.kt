@@ -21,7 +21,7 @@ val AndroidApplicationPlugin = Dependency(
     url = "https://developer.android.com/studio/build",
     group = "com.android.application",
     id = "gradle-plugin",
-    version = "8.6.1",
+    version = "8.5.2",
     catalogVersionName = "agp",
     catalogName = "android-application",
     platforms = emptySet()
@@ -42,7 +42,7 @@ val ComposePlugin = Dependency(
     id = "gradle-plugin",
     version = "1.7.3",
     catalogVersionName = "compose",
-    catalogName = "compose",
+    catalogName = "compose-multiplatform",
     platforms = emptySet()
 )
 
@@ -114,8 +114,6 @@ val AndroidxLifecycleViewmodel = AndroidxLifecycleRuntime.copy(
     catalogName = "androidx-lifecycle-viewmodel",
     platforms = emptySet()
 )
-
-
 
 
 val AndroidxNavigation = Dependency(

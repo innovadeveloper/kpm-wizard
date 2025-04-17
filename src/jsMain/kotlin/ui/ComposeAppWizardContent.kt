@@ -228,8 +228,8 @@ internal fun Set<DependencyBox>.getSelectedDependencies() =
                     KtorClientMingw,
                     Ktorfit,
                     KtorSerializationJSON,
-                    KtorfitPlugin,
-                    KspPlugin
+                    KspPlugin,
+                    KtorfitPlugin
                 )
                 SQLDelightPlugin -> listOf(
                     SQLDelightPlugin,
