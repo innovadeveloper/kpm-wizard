@@ -75,6 +75,12 @@ val KtorClientOkhttp = KtorCore.copy(
     platforms = setOf(Android, Jvm)
 )
 
+val KtorClientCIO = KtorCore.copy(
+    id = "ktor-client-cio",
+    catalogName = "ktor-client-cio",
+    platforms = setOf(Android, Jvm)
+)
+
 val KtorClientJs = KtorCore.copy(
     id = "ktor-client-js",
     catalogName = "ktor-client-js",

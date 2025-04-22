@@ -9,6 +9,11 @@ class AndroidManifest(info: ProjectInfo) : ProjectFile {
         <?xml version="1.0" encoding="utf-8"?>
         <manifest xmlns:android="http://schemas.android.com/apk/res/android">
         
+            <!-- Permisos comunes -->
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+            
+            
             <application
                 android:name=".AppApplication"
                 android:icon="@mipmap/ic_launcher"
@@ -36,6 +41,9 @@ class SimpleAndroidManifest(info: ProjectInfo) : ProjectFile {
     override val content = """
         <?xml version="1.0" encoding="utf-8"?>
         <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+            <!-- Permisos comunes -->
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
         
             <application
                 android:icon="@mipmap/ic_launcher"

@@ -223,6 +223,7 @@ internal fun Set<DependencyBox>.getSelectedDependencies() =
                     KtorClientLogging,
                     KtorClientDarwin,
                     KtorClientOkhttp,
+                    KtorClientCIO,
                     KtorClientJs,
                     KtorClientLinux,
                     KtorClientMingw,

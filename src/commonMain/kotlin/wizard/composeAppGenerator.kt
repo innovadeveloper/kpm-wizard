@@ -100,7 +100,9 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
 
 
             if(!info.hasPlatform(ProjectPlatform.Jvm)){
-//                add(OnlyDesktopHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopOrOnlyAndroidCommonHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopOrOnlyAndroidHTTPGenericProvider(info, true))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopOrOnlyAndroidKoinService(info))   // sobreescribir el service module
             }
         }
     }
@@ -118,9 +120,9 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
             add(DesktopKoinModuleKt(info))
 
             if(!info.hasPlatform(ProjectPlatform.Android)){
-                add(OnlyDesktopCommonHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
-                add(OnlyDesktopHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
-                add(DesktopKoinService(info))   // sobreescribir el service module
+                add(OnlyDesktopOrOnlyAndroidCommonHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopOrOnlyAndroidHTTPGenericProvider(info, false))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopOrOnlyAndroidKoinService(info))   // sobreescribir el service module
             }
         }
     }

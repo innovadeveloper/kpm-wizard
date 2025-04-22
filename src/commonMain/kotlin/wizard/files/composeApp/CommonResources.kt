@@ -473,7 +473,7 @@ fun serviceModule(): Module = module {
 }
 
 
-class DesktopKoinService(info: ProjectInfo) : ProjectFile {
+class OnlyDesktopOrOnlyAndroidKoinService(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
     override val content = """
 package ${info.packageId}.di
@@ -591,8 +591,30 @@ class HTTPGenericProvider (val baseUrl: String, val appParamsDTO: AppParamsDTO) 
 
 
 
-class OnlyDesktopHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.desktop.kt"
+class OnlyDesktopOrOnlyAndroidHTTPGenericProvider(info: ProjectInfo, isAndroid : Boolean = false) : ProjectFile {
+    override val path = if(isAndroid) "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.android.kt" else "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.desktop.kt"
+
+    override val content = """
+package ${info.packageId}.data.network.providers
+
+import ${info.packageId}.data.network.AnotherServerAPI
+import ${info.packageId}.data.network.IdentityServerAPI
+import ${info.packageId}.data.network.createAnotherServerAPI
+import ${info.packageId}.data.network.createIdentityServerAPI
+import ${info.packageId}.domain.dto.AppParamsDTO
+
+actual fun createAnotherServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): AnotherServerAPI{
+    return HTTPGenericProvider(baseUrl, appParamsDTO).create().createAnotherServerAPI()
+}
+actual fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): IdentityServerAPI{
+    return HTTPGenericProvider(baseUrl, appParamsDTO).create().createIdentityServerAPI()
+}
+    """.trimIndent()
+}
+
+
+class OnlyAndroidHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.android.kt"
 
     override val content = """
 package ${info.packageId}.data.network.providers
@@ -613,7 +635,7 @@ actual fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO
 }
 
 // com.abexa.kmp.data.network.providers
-class OnlyDesktopCommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
+class OnlyDesktopOrOnlyAndroidCommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
     override val content = """
 package ${info.packageId}.data.network.providers
