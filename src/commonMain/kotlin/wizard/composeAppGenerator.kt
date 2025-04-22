@@ -97,6 +97,11 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
             add(AndroidKoinModuleKt(info))
             add(AndroidDatabaseDriverFactoryKt(info))
             add(AndroidPreferencesConfigKt(info))
+
+
+            if(!info.hasPlatform(ProjectPlatform.Jvm)){
+//                add(OnlyDesktopHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+            }
         }
     }
 
@@ -106,10 +111,17 @@ fun ProjectInfo.generateComposeAppFiles(): List<ProjectFile> = buildList {
         addAll(DesktopAppIcons(info))
 
         if (info.dependencies.contains(SQLDelightPlugin) && info.dependencies.contains(Koin)) {
+            add(DesktopMainWithKoinKt(info))
             add(DesktopDatabaseDriverFactoryKt(info))
             add(DesktopFileSettingsProviderKt(info))
             add(DesktopPreferencesConfigKt(info))
             add(DesktopKoinModuleKt(info))
+
+            if(!info.hasPlatform(ProjectPlatform.Android)){
+                add(OnlyDesktopCommonHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+                add(OnlyDesktopHTTPGenericProvider(info))   // sobreescribe el httpgenericprovider
+                add(DesktopKoinService(info))   // sobreescribir el service module
+            }
         }
     }
 

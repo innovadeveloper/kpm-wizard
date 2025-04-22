@@ -472,6 +472,49 @@ fun serviceModule(): Module = module {
     """.trimIndent()
 }
 
+
+class DesktopKoinService(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
+    override val content = """
+package ${info.packageId}.di
+
+import ${info.packageId}.data.db.repositories.OrderRepository
+import ${info.packageId}.data.network.AnotherServerAPI
+import ${info.packageId}.data.network.IdentityServerAPI
+import ${info.packageId}.data.network.providers.createIdentityServerAPI2
+import ${info.packageId}.data.network.providers.createAnotherServerAPI2
+import ${info.packageId}.data.network.providers.HTTPGenericProvider
+import ${info.packageId}.data.network.providers.IKtorfitProvider
+import ${info.packageId}.data.spf.IPreferences
+import ${info.packageId}.data.spf.PreferencesImpl
+import ${info.packageId}.data.spf.provideSettings
+import ${info.packageId}.di.qualifiers.NetworkQualifier
+import ${info.packageId}.di.qualifiers.ServiceQualifier
+import ${info.packageId}.domain.dto.AppParamsDTO
+import ${info.packageId}.ui.screen.counter.CounterViewModel
+import org.koin.core.module.Module
+import org.koin.dsl.module
+
+fun serviceModule(): Module = module {
+    single<IPreferences> { PreferencesImpl(provideSettings()) }
+    single<AppParamsDTO> { AppParamsDTO(alias = "", isTrackEnabled = false) }
+
+    single<IdentityServerAPI> { createIdentityServerAPI2("https://wso2is-service-7.abexa.pe/", get()) }
+    single<AnotherServerAPI> { createAnotherServerAPI2("https://wso2is-service-7.abexa.pe/", get()) }
+    
+    factory(ServiceQualifier.ServiceA) {
+        CounterViewModel(preferences = get(),
+            identityServerAPI = get(),
+            appParamsDTO = get(),
+            orderRepository = OrderRepository(dbDriver = get()) )
+    }
+}
+    """.trimIndent()
+}
+
+
+
+
 // com.abexa.kmp.data.network.providers
 class CommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
@@ -499,6 +542,108 @@ data class NetworkException(val statusCode : Int, val error : String) : Exceptio
 interface IKtorfitProvider{
     fun create() : Ktorfit
 }
+
+/**
+ * Crea un proveedor genérico http envuelto por ktorfit
+ */
+class HTTPGenericProvider (val baseUrl: String, val appParamsDTO: AppParamsDTO) : IKtorfitProvider{
+    override fun create(): Ktorfit = Ktorfit.Builder()
+        .baseUrl(baseUrl)
+        .httpClient(HttpClient{
+            expectSuccess = true // Para que dispare excepciones en 4xx y 5xx
+            install(DefaultRequest) {
+                header("Content-Type", "application/json")
+                header("Custom-Key", appParamsDTO.alias)
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                        prettyPrint = true
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        println("KtorLog => ${'$'}message") // Esto se verá en consola/logcat
+                    }
+                }
+            }
+            HttpResponseValidator {
+                handleResponseExceptionWithRequest { exception, _ ->
+                    if (exception is ResponseException) {
+                        val statusCode = exception.response.status.value
+                        val errorBody = exception.response.bodyAsText()
+                        throw NetworkException(statusCode, errorBody)
+                    }
+                }
+            }
+        })
+        .build()
+}
+    """.trimIndent()
+}
+
+
+
+class OnlyDesktopHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.desktop.kt"
+
+    override val content = """
+package ${info.packageId}.data.network.providers
+
+import ${info.packageId}.data.network.AnotherServerAPI
+import ${info.packageId}.data.network.IdentityServerAPI
+import ${info.packageId}.data.network.createAnotherServerAPI
+import ${info.packageId}.data.network.createIdentityServerAPI
+import ${info.packageId}.domain.dto.AppParamsDTO
+
+actual fun createAnotherServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): AnotherServerAPI{
+    return HTTPGenericProvider(baseUrl, appParamsDTO).create().createAnotherServerAPI()
+}
+actual fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): IdentityServerAPI{
+    return HTTPGenericProvider(baseUrl, appParamsDTO).create().createIdentityServerAPI()
+}
+    """.trimIndent()
+}
+
+// com.abexa.kmp.data.network.providers
+class OnlyDesktopCommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+    override val content = """
+package ${info.packageId}.data.network.providers
+
+import ${info.packageId}.data.network.AnotherServerAPI
+import ${info.packageId}.data.network.IdentityServerAPI
+import ${info.packageId}.domain.dto.AppParamsDTO
+import de.jensklingenberg.ktorfit.Ktorfit
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
+import io.ktor.client.statement.bodyAsText
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
+data class NetworkException(val statusCode : Int, val error : String) : Exception("API Error ${'$'}statusCode: ${'$'}error")
+
+interface IKtorfitProvider{
+    fun create() : Ktorfit
+}
+
+expect fun createAnotherServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): AnotherServerAPI
+expect fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): IdentityServerAPI
 
 /**
  * Crea un proveedor genérico http envuelto por ktorfit

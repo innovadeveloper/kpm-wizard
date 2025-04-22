@@ -32,6 +32,39 @@ class DesktopMainKt(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
+class DesktopMainWithKoinKt(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/src/desktopMain/kotlin/main.kt"
+    override val content = """
+        import org.jetbrains.compose.ui.tooling.preview.Preview
+        import androidx.compose.runtime.Composable
+        import androidx.compose.ui.unit.dp
+        import androidx.compose.ui.window.Window
+        import androidx.compose.ui.window.application
+        import androidx.compose.ui.window.rememberWindowState
+        import java.awt.Dimension
+        import ${info.packageId}.App
+        import ${info.packageId}.data.di.desktopModule
+        import ${info.packageId}.di.initKoin
+        
+        fun main() = application {
+            initKoin(desktopModule())
+        
+            Window(
+                title = "Multiplatform App",
+                state = rememberWindowState(width = 800.dp, height = 600.dp),
+                onCloseRequest = ::exitApplication,
+            ) {
+                window.minimumSize = Dimension(350, 600)
+                App()
+            }
+        }
+        
+        @Preview
+        @Composable
+        fun AppPreview() { App() }
+    """.trimIndent()
+}
+
 class IosMainKt(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/src/iosMain/kotlin/main.kt"
     override val content = """
