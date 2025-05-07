@@ -102,8 +102,9 @@ class CommonAbstractViewModel(info: ProjectInfo) : ProjectFile {
 
 
 
-class CommonCounterScreen(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterScreen.kt"
+class CommonCounterScreen(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterScreen.kt"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/ui/screen/counter/CounterScreen.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterScreen.kt"
     override val content = """
 package ${info.packageId}.ui.screen.counter
 
@@ -203,8 +204,9 @@ class CounterScreenClass : AbstractScreen<CounterViewModel, CounterViewModel.Cou
 }
 
 
-class CommonCounterViewModel(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterViewModel.kt"
+class CommonCounterViewModel(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterViewModel.kt"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/ui/screen/counter/CounterViewModel.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/ui/screen/counter/CounterViewModel.kt"
     override val content = """
 package ${info.packageId}.ui.screen.counter
 
@@ -272,8 +274,8 @@ class CounterViewModel(private val preferences: IPreferences, private val identi
 }
 
 
-class CommonDatabaseDriverFactoryExpect(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/DatabaseDriverFactory.kt"
+class CommonDatabaseDriverFactoryExpect(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/data/db/DatabaseDriverFactory.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/DatabaseDriverFactory.kt"
     override val content = """
 package ${info.packageId}.data.db
 
@@ -285,9 +287,11 @@ expect class DatabaseDriverFactory : DBDriver{
     """.trimIndent()
 }
 
-
-class CommonDBDriver(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/DBDriver.kt"
+class CommonDBDriver(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/db/DBDriver.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/DBDriver.kt"
     override val content = """
 package ${info.packageId}.data.db
 
@@ -299,8 +303,12 @@ interface DBDriver {
     """.trimIndent()
 }
 
-class CommonDBRepository(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/repositories/OrderRepository.kt"
+class CommonDBRepository(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/db/repositories/OrderRepository.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/db/repositories/OrderRepository.kt"
+
     override val content = """
 package ${info.packageId}.data.db.repositories
 
@@ -338,8 +346,12 @@ data class OrderWithUser(val id: Long, val userName: String, val amount: Double)
 }
 
 
-class CommonOrdersSQLDelight(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/orders.sq"
+class CommonOrdersSQLDelight(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/sqldelight/${info.packagePath}/orders.sq"
+    else
+        "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/orders.sq"
+
     override val content = """
 joinOrdersAndUsersByUserId:
 SELECT orders.id, users.name, orders.amount
@@ -348,8 +360,12 @@ INNER JOIN users ON orders.user_id = users.id;
     """.trimIndent()
 }
 
-class CommonUsersSQLDelight(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/users.sq"
+class CommonUsersSQLDelight(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/sqldelight/${info.packagePath}/users.sq"
+    else
+        "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/users.sq"
+
     override val content = """
 insertUser:
 INSERT INTO users (name, email) VALUES (?, ?);
@@ -362,8 +378,11 @@ SELECT * FROM users;
     """.trimIndent()
 }
 
-class CommonSchemasSQLDelight(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/schemas.sq"
+class CommonSchemasSQLDelight(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/sqldelight/${info.packagePath}/schemas.sq"
+    else
+        "${info.moduleName}/src/commonMain/sqldelight/${info.packagePath}/schemas.sq"
     override val content = """
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -384,8 +403,12 @@ CREATE TABLE orders (
 
 // KOIN
 
-class CommonNetworkKoinQualifier(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/qualifiers/NetworkQualifier.kt"
+class CommonNetworkKoinQualifier(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/di/qualifiers/NetworkQualifier.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/qualifiers/NetworkQualifier.kt"
+
     override val content = """
 package ${info.packageId}.di.qualifiers
 
@@ -400,8 +423,12 @@ object NetworkQualifier {
 }
 
 
-class CommonServiceKoinQualifier(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/qualifiers/ServiceQualifier.kt"
+class CommonServiceKoinQualifier(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/di/qualifiers/ServiceQualifier.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/qualifiers/ServiceQualifier.kt"
+
     override val content = """
 package ${info.packageId}.di.qualifiers
 
@@ -416,8 +443,12 @@ object ServiceQualifier {
 }
 
 
-class CommonKoinInit(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/KoinInit.kt"
+class CommonKoinInit(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/di/KoinInit.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/KoinInit.kt"
+
     override val content = """
 package ${info.packageId}.di
 
@@ -432,8 +463,12 @@ fun initKoin(platformModule: Module) {
     """.trimIndent()
 }
 
-class CommonKoinService(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
+class CommonKoinService(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/di/ServiceModule.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
+
     override val content = """
 package ${info.packageId}.di
 
@@ -473,8 +508,12 @@ fun serviceModule(): Module = module {
 }
 
 
-class OnlyDesktopOrOnlyAndroidKoinService(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
+class OnlyDesktopOrOnlyAndroidKoinService(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/di/ServiceModule.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
+
     override val content = """
 package ${info.packageId}.di
 
@@ -495,6 +534,30 @@ import ${info.packageId}.ui.screen.counter.CounterViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
+${if(isOnlyAndroid) """
+fun serviceModule(): Module = module {
+    single<IPreferences> {
+        val sharedPreferences = AppApplication.appContext.getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+        PreferencesImpl(SharedPreferencesSettings(sharedPreferences))
+    }
+
+    single<AppParamsDTO> { AppParamsDTO(alias = "", isTrackEnabled = false) }
+
+    single<IdentityServerAPI> {
+        HTTPGenericProvider("https://wso2is-service-7.abexa.pe/", get()).create().createIdentityServerAPI()
+    }
+    single<AnotherServerAPI> {
+        HTTPGenericProvider("https://wso2is-service-7.abexa.pe/", get()).create().createAnotherServerAPI()
+    }
+    
+    factory(ServiceQualifier.ServiceA) {
+        CounterViewModel(preferences = get(),
+            identityServerAPI = get(),
+            appParamsDTO = get(),
+            orderRepository = OrderRepository(dbDriver = get()) )
+    }
+}
+""" else """
 fun serviceModule(): Module = module {
     single<IPreferences> { PreferencesImpl(provideSettings()) }
     single<AppParamsDTO> { AppParamsDTO(alias = "", isTrackEnabled = false) }
@@ -509,6 +572,8 @@ fun serviceModule(): Module = module {
             orderRepository = OrderRepository(dbDriver = get()) )
     }
 }
+"""}
+
     """.trimIndent()
 }
 
@@ -516,8 +581,12 @@ fun serviceModule(): Module = module {
 
 
 // com.abexa.kmp.data.network.providers
-class CommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+class CommonHTTPGenericProvider(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+
     override val content = """
 package ${info.packageId}.data.network.providers
 
@@ -635,8 +704,12 @@ actual fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO
 }
 
 // com.abexa.kmp.data.network.providers
-class OnlyDesktopOrOnlyAndroidCommonHTTPGenericProvider(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+class OnlyDesktopOrOnlyAndroidCommonHTTPGenericProvider(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/providers/HTTPGenericProvider.kt"
+
     override val content = """
 package ${info.packageId}.data.network.providers
 
@@ -664,8 +737,8 @@ interface IKtorfitProvider{
     fun create() : Ktorfit
 }
 
-expect fun createAnotherServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): AnotherServerAPI
-expect fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): IdentityServerAPI
+${if(isOnlyAndroid) "" else "expect fun createAnotherServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): AnotherServerAPI"}
+${if(isOnlyAndroid) "" else "expect fun createIdentityServerAPI2(baseUrl : String, appParamsDTO: AppParamsDTO): IdentityServerAPI"}
 
 /**
  * Crea un proveedor genérico http envuelto por ktorfit
@@ -713,8 +786,12 @@ class HTTPGenericProvider (val baseUrl: String, val appParamsDTO: AppParamsDTO) 
     """.trimIndent()
 }
 
-class CommonPreferencesSPF(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/spf/Preferences.kt"
+class CommonPreferencesSPF(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/spf/Preferences.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/spf/Preferences.kt"
+
     override val content = """
 package ${info.packageId}.data.spf
 
@@ -767,8 +844,12 @@ class PreferencesImpl(private val settings : Settings) : IPreferences{
 }
 
 
-class CommonPreferencesConfig(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/spf/PreferencesConfig.kt"
+class CommonPreferencesConfig(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/spf/PreferencesConfig.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/spf/PreferencesConfig.kt"
+
     override val content = """
 package ${info.packageId}.data.spf
 
@@ -780,8 +861,12 @@ expect fun provideSettings(): Settings
 
 
 
-class CommonNetworkAnotherServerAPI(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/AnotherServerAPI.kt"
+class CommonNetworkAnotherServerAPI(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/network/AnotherServerAPI.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/AnotherServerAPI.kt"
+
     override val content = """
 package ${info.packageId}.data.network
 
@@ -814,8 +899,11 @@ interface AnotherServerAPI {
 }
 
 
-class CommonNetworkIdentityServerAPI(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/IdentityServerAPI.kt"
+class CommonNetworkIdentityServerAPI(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/data/network/IdentityServerAPI.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/data/network/IdentityServerAPI.kt"
     override val content = """
 package ${info.packageId}.data.network
 
@@ -849,8 +937,10 @@ interface IdentityServerAPI {
 
 
 
-class CommonConstants(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/constants/Constants.kt"
+class CommonConstants(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/domain/constants/Constants.kt"
+    else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/constants/Constants.kt"
+
     override val content = """
 package ${info.packageId}.domain.constants
 
@@ -861,8 +951,11 @@ object Constants {
 }
 
 
-class CommonRequestTokenDTO(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/request/TokenRequest.kt"
+class CommonRequestTokenDTO(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/domain/dto/request/TokenRequest.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/request/TokenRequest.kt"
     override val content = """
 package ${info.packageId}.domain.dto.request
 
@@ -884,8 +977,12 @@ data class TokenRequest(
 }
 
 
-class CommonAccessTokenDTO(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/AccessTokenDTO.kt"
+class CommonAccessTokenDTO(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/domain/dto/AccessTokenDTO.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/AccessTokenDTO.kt"
+
     override val content = """
 package ${info.packageId}.domain.dto
 
@@ -909,8 +1006,12 @@ data class AccessTokenDTO (
 """.trimIndent()
 }
 
-class CommonAppParamsDTO(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/AppParamsDTO.kt"
+class CommonAppParamsDTO(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/domain/dto/AppParamsDTO.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/domain/dto/AppParamsDTO.kt"
+
     override val content = """
 package ${info.packageId}.domain.dto
 
@@ -925,8 +1026,12 @@ data class AppParamsDTO(
 }
 
 
-class CommonExtensions(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/infrastructure/extensions/Extensions.kt"
+class CommonExtensions(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/infrastructure/extensions/Extensions.kt"
+    else
+        "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/infrastructure/extensions/Extensions.kt"
+
     override val content = """
 package ${info.packageId}.infrastructure.extensions
 

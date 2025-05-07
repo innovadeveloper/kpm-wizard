@@ -4,8 +4,8 @@ import wizard.ProjectFile
 import wizard.ProjectInfo
 import wizard.packagePath
 
-class ColorKt(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/theme/Color.kt"
+class ColorKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/theme/Color.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/theme/Color.kt"
     override val content = """
         package ${info.packageId}.theme
         

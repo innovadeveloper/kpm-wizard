@@ -29,32 +29,35 @@ class JsFavicon(info: ProjectInfo) : BinaryFile {
     override val resourcePath = "web-app-icons/favicon.ico"
 }
 
-fun AndroidAppIcons(info: ProjectInfo): List<ProjectFile> = listOf(
-    getAndroidAppIcon(info.moduleName, "mipmap-anydpi-v26/ic_launcher.xml"),
-    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_background.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_foreground.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_monochrome.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_background.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_foreground.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_monochrome.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_background.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_foreground.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_monochrome.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_background.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_foreground.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_monochrome.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_background.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_foreground.png"),
-    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_monochrome.png"),
+fun AndroidAppIcons(info: ProjectInfo, isOnlyAndroid : Boolean = false): List<ProjectFile> = listOf(
+    getAndroidAppIcon(info.moduleName, "mipmap-anydpi-v26/ic_launcher.xml", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_background.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_foreground.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-hdpi/ic_launcher_monochrome.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_background.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_foreground.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-mdpi/ic_launcher_monochrome.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_background.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_foreground.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xhdpi/ic_launcher_monochrome.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_background.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_foreground.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxhdpi/ic_launcher_monochrome.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_background.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_foreground.png", isOnlyAndroid = true),
+    getAndroidAppIcon(info.moduleName, "mipmap-xxxhdpi/ic_launcher_monochrome.png", isOnlyAndroid = true),
 )
 
-private fun getAndroidAppIcon(moduleName: String, name: String) = object : BinaryFile {
-    override val path = "$moduleName/src/androidMain/res/$name"
+private fun getAndroidAppIcon(moduleName: String, name: String, isOnlyAndroid: Boolean = false) = object : BinaryFile {
+    override val path = if (isOnlyAndroid)
+        "$moduleName/src/main/res/$name"
+    else
+        "$moduleName/src/androidMain/res/$name"
     override val resourcePath = "android-app-icons/$name"
 }
 

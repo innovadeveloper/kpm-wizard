@@ -2,8 +2,10 @@ package wizard.files.composeApp
 
 import wizard.*
 
-class IcCycloneXml(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_cyclone.xml"
+class IcCycloneXml(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_cyclone.xml"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/res/drawable/ic_cyclone.xml" else "${info.moduleName}/src/commonMain/composeResources/drawable/ic_cyclone.xml"
+
     override val content = """
         <vector xmlns:android="http://schemas.android.com/apk/res/android"
             android:width="24dp"
@@ -20,8 +22,10 @@ class IcCycloneXml(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class IcDarkModeXml(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_dark_mode.xml"
+class IcDarkModeXml(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_dark_mode.xml"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/res/drawable/ic_dark_mode.xml" else "${info.moduleName}/src/commonMain/composeResources/drawable/ic_dark_mode.xml"
+
     override val content = """
         <vector xmlns:android="http://schemas.android.com/apk/res/android"
             android:width="24dp"
@@ -35,8 +39,10 @@ class IcDarkModeXml(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class IcLightModeXml(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_light_mode.xml"
+class IcLightModeXml(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_light_mode.xml"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/res/drawable/ic_light_mode.xml" else "${info.moduleName}/src/commonMain/composeResources/drawable/ic_light_mode.xml"
+
     override val content = """
         <vector xmlns:android="http://schemas.android.com/apk/res/android"
             android:width="24dp"
@@ -50,8 +56,10 @@ class IcLightModeXml(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class IcRotateRightXml(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_rotate_right.xml"
+class IcRotateRightXml(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/composeResources/drawable/ic_rotate_right.xml"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/res/drawable/ic_rotate_right.xml" else "${info.moduleName}/src/commonMain/composeResources/drawable/ic_rotate_right.xml"
+
     override val content = """
         <vector xmlns:android="http://schemas.android.com/apk/res/android"
             android:width="24dp"
@@ -66,10 +74,13 @@ class IcRotateRightXml(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class StringsXml(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/composeResources/values/strings.xml"
+class StringsXml(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/composeResources/values/strings.xml"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/res/values/strings.xml" else "${info.moduleName}/src/commonMain/composeResources/values/strings.xml"
+
     override val content = """
         <resources>
+            <string name="app_name">SampleCompose</string>
             <string name="cyclone">Cyclone</string>
             <string name="open_github">Open github</string>
             <string name="run">Run</string>
@@ -79,7 +90,8 @@ class StringsXml(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class IndieFlowerTtf(info: ProjectInfo) : BinaryFile {
+class IndieFlowerTtf(info: ProjectInfo, isOnlyAndroid : Boolean = false) : BinaryFile {
     override val path = "${info.moduleName}/src/commonMain/composeResources/font/IndieFlower-Regular.ttf"
+
     override val resourcePath = "IndieFlower-Regular"
 }

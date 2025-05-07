@@ -4,8 +4,10 @@ import wizard.ProjectFile
 import wizard.ProjectInfo
 import wizard.packagePath
 
-class ThemeKt(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/theme/Theme.kt"
+class ThemeKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
+//    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/theme/Theme.kt"
+    override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/theme/Theme.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/theme/Theme.kt"
+
     override val content = """
         package ${info.packageId}.theme
 
@@ -174,8 +176,12 @@ class IosThemeKt(info: ProjectInfo) : ProjectFile {
     """.trimIndent()
 }
 
-class AndroidThemeKt(info: ProjectInfo) : ProjectFile {
-    override val path = "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/theme/Theme.android.kt"
+class AndroidThemeKt(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyAndroid)
+        "${info.moduleName}/src/main/java/${info.packagePath}/theme/Theme.android.kt"
+    else
+        "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/theme/Theme.android.kt"
+
     override val content = """
         package ${info.packageId}.theme
 
