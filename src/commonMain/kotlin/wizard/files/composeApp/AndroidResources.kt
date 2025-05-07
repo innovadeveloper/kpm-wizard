@@ -24,7 +24,7 @@ class AndroidManifest(info: ProjectInfo, isOnlyAndroid: Boolean = false) : Proje
                 android:label="${info.name}"
                 android:theme="@android:style/Theme.Material.NoActionBar">
                 <activity
-                    android:name=".AppActivity"
+                    android:name="${if (isOnlyAndroid) ".MainActivity" else ".AppActivity"}"
                     android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
                     android:launchMode="singleInstance"
                     android:windowSoftInputMode="adjustPan"
@@ -58,7 +58,7 @@ class SimpleAndroidManifest(info: ProjectInfo, isOnlyAndroid: Boolean = false) :
                 android:label="${info.name}"
                 android:theme="@android:style/Theme.Material.NoActionBar">
                 <activity
-                    android:name=".AppActivity"
+                    android:name=".MainActivity"
                     android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
                     android:launchMode="singleInstance"
                     android:windowSoftInputMode="adjustPan"

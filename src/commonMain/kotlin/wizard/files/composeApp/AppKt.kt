@@ -25,6 +25,9 @@ class FixResourceAppBuildGradle(info: ProjectInfo) : ProjectFile {
     override val path = "${info.moduleName}/fix_app.build.gradle.kts"
 
     override val content = """
+//import org.jetbrains.compose.ExperimentalComposeLibrary
+//import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
 plugins {
 //    alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose.compiler)
@@ -39,8 +42,33 @@ plugins {
 
 //https://developer.android.com/develop/ui/compose/testing#setup
 dependencies {
-    androidTestImplementation(libs.androidx.uitest.junit4)
-    debugImplementation(libs.androidx.uitest.testManifest)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    // testImplementation(libs.junit)
+    // androidTestImplementation(libs.androidx.junit)
+    // androidTestImplementation(libs.androidx.espresso.core)
+    // androidTestImplementation(platform(libs.androidx.compose.bom))
+    // androidTestImplementation(libs.androidx.ui.test.junit4)
+    // debugImplementation(libs.androidx.ui.tooling)
+    // debugImplementation(libs.androidx.ui.test.manifest)
+
+//    ANDROID
+//    implementation(libs.androidx.activityCompose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.sqlDelight.driver.android)
+    implementation("com.abexa.kmp-libraries:shared-kmp-library:1.4.0@aar")
+
+//    COMMON
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.content.negotiation)
@@ -54,11 +82,6 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
     implementation(libs.multiplatformSettings)
-//    implementation(libs.androidx.activityCompose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.sqlDelight.driver.android)
 }
 """.trimIndent()
 }
@@ -172,20 +195,20 @@ class CommonAppKoin(info: ProjectInfo, isOnlyAndroid: Boolean = false) : Project
     override val content = """
 package ${info.packageId}
 
-    import androidx.compose.material3.MaterialTheme
-    import androidx.compose.runtime.*
-    import org.jetbrains.compose.ui.tooling.preview.Preview
-    import ${info.packageId}.ui.screen.counter.CounterScreenClass
-    import ${info.packageId}.ui.screen.counter.CounterViewModel
-    
-    @Composable
-    @Preview
-    fun App() {
-        MaterialTheme {
-            CounterScreenClass().build<CounterViewModel>()
-        }
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
+import ${if(isOnlyAndroid) "androidx.compose.ui.tooling.preview.Preview" else "org.jetbrains.compose.ui.tooling.preview.Preview"} 
+import ${info.packageId}.ui.screen.counter.CounterScreenClass
+import ${info.packageId}.ui.screen.counter.CounterViewModel
+
+@Composable
+@Preview
+fun App() {
+    MaterialTheme {
+        CounterScreenClass().build<CounterViewModel>()
     }
-    """.trimIndent()
+}
+""".trimIndent()
 }
 
 class AppKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
@@ -303,7 +326,25 @@ class AndroidAppKt(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectF
     else
         "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/App.android.kt"
 
-    override val content = """
+    override val content = if(isOnlyAndroid)"""
+        package ${info.packageId}
+
+        import android.os.Bundle
+        import androidx.activity.ComponentActivity
+        import androidx.activity.compose.setContent
+        import ${info.packageId}.ui.screen.counter.CounterScreenClass
+        import ${info.packageId}.ui.screen.counter.CounterViewModel
+
+        class MainActivity : ComponentActivity() {
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContent {
+                    CounterScreenClass().build<CounterViewModel>()
+                }
+            }
+        }
+    """.trimIndent() else
+        """
         package ${info.packageId}
 
         import android.os.Bundle
@@ -373,19 +414,16 @@ class AndroidDatabaseDriverFactoryKt(info: ProjectInfo, isOnlyAndroid: Boolean =
         import app.cash.sqldelight.driver.android.AndroidSqliteDriver
         import ${info.packageId}.db.MyDatabase
         ${if(isOnlyAndroid) """
-            class DatabaseDriverFactory(private val context: Context) : DBDriver {
-            override fun createDriver(): SqlDriver {
-                return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
-                }
-            }
-        """ else """
-            actual class DatabaseDriverFactory(private val context: Context) : DBDriver {
-            actual override fun createDriver(): SqlDriver {
-                return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
-                }
-            }
-        """}
-    """.trimIndent()
+class DatabaseDriverFactory(private val context: Context) : DBDriver {
+    override fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
+    }
+}""" else """
+actual class DatabaseDriverFactory(private val context: Context) : DBDriver {
+    actual override fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
+    }
+}"""}""".trimIndent()
 }
 
 class AndroidPreferencesConfigKt(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {

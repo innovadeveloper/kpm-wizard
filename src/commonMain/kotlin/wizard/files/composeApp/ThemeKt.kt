@@ -113,9 +113,11 @@ class ThemeKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile 
                 )
             }
         }
-
+        ${if(isOnlyAndroid) """""".trimIndent() else """
         @Composable
         internal expect fun SystemAppearance(isDark: Boolean)
+        """.trimIndent()}
+        
 
     """.trimIndent()
 }
@@ -192,7 +194,7 @@ class AndroidThemeKt(info: ProjectInfo, isOnlyAndroid: Boolean = false) : Projec
         import androidx.core.view.WindowInsetsControllerCompat
 
         @Composable
-        internal actual fun SystemAppearance(isDark: Boolean) {
+        internal ${if (isOnlyAndroid) "" else "actual"} fun SystemAppearance(isDark: Boolean) {
             val view = LocalView.current
             LaunchedEffect(isDark) {
                 val window = (view.context as Activity).window

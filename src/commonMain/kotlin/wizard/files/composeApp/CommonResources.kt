@@ -118,7 +118,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ${info.packageId}.di.qualifiers.ServiceQualifier
-import ${info.packageId}.ui.screen.AbstractScreen
+import ${if(isOnlyAndroid) """com.abexa.shared.screen.AbstractScreen""".trimIndent() else """${info.packageId}.ui.screen.AbstractScreen""".trimIndent()}
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -217,8 +217,10 @@ import ${info.packageId}.domain.dto.AccessTokenDTO
 import ${info.packageId}.domain.dto.AppParamsDTO
 import ${info.packageId}.domain.dto.request.TokenRequest
 import ${info.packageId}.infrastructure.extensions.safeCallAsPair
-import ${info.packageId}.ui.screen.AbstractViewModel
-import ${info.packageId}.ui.screen.IViewModel
+//import ${info.packageId}.ui.screen.AbstractViewModel
+import ${if(isOnlyAndroid) """com.abexa.shared.screen.AbstractViewModel""".trimIndent() else """${info.packageId}.ui.screen.IViewModel""".trimIndent()}
+import ${if(isOnlyAndroid) """com.abexa.shared.screen.IViewModel""".trimIndent() else """${info.packageId}.ui.screen.IViewModel""".trimIndent()}
+//import ${info.packageId}.ui.screen.IViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Base64
 
@@ -469,19 +471,31 @@ class CommonKoinService(info: ProjectInfo, isOnlyAndroid: Boolean = false) : Pro
     else
         "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/di/ServiceModule.kt"
 
+
     override val content = """
 package ${info.packageId}.di
 
 import ${info.packageId}.data.db.repositories.OrderRepository
 import ${info.packageId}.data.network.AnotherServerAPI
 import ${info.packageId}.data.network.IdentityServerAPI
+
+${if(isOnlyAndroid) """
 import ${info.packageId}.data.network.createAnotherServerAPI
 import ${info.packageId}.data.network.createIdentityServerAPI
+""".trimIndent() else 
+"""
+import ${info.packageId}.data.network.providers.createIdentityServerAPI2
+import ${info.packageId}.data.network.providers.createAnotherServerAPI2
+import ${info.packageId}.data.spf.provideSettings
+""".trimIndent()}
+
 import ${info.packageId}.data.network.providers.HTTPGenericProvider
 import ${info.packageId}.data.network.providers.IKtorfitProvider
 import ${info.packageId}.data.spf.IPreferences
 import ${info.packageId}.data.spf.PreferencesImpl
-import ${info.packageId}.data.spf.provideSettings
+
+
+
 import ${info.packageId}.di.qualifiers.NetworkQualifier
 import ${info.packageId}.di.qualifiers.ServiceQualifier
 import ${info.packageId}.domain.dto.AppParamsDTO
@@ -517,20 +531,33 @@ class OnlyDesktopOrOnlyAndroidKoinService(info: ProjectInfo, isOnlyAndroid: Bool
     override val content = """
 package ${info.packageId}.di
 
+
+import ${info.packageId}.AppApplication
+import ${info.packageId}.domain.constants.Constants
 import ${info.packageId}.data.db.repositories.OrderRepository
 import ${info.packageId}.data.network.AnotherServerAPI
 import ${info.packageId}.data.network.IdentityServerAPI
+import ${info.packageId}.domain.dto.AppParamsDTO
+import ${info.packageId}.di.qualifiers.ServiceQualifier
+import ${info.packageId}.ui.screen.counter.CounterViewModel
+
+${if(isOnlyAndroid) """
+import android.content.Context
+import ${info.packageId}.data.network.createAnotherServerAPI
+import ${info.packageId}.data.network.createIdentityServerAPI
+import com.russhwolf.settings.SharedPreferencesSettings
+""".trimIndent() else
+"""
 import ${info.packageId}.data.network.providers.createIdentityServerAPI2
 import ${info.packageId}.data.network.providers.createAnotherServerAPI2
+import ${info.packageId}.data.spf.provideSettings
+""".trimIndent()}
+
 import ${info.packageId}.data.network.providers.HTTPGenericProvider
 import ${info.packageId}.data.network.providers.IKtorfitProvider
 import ${info.packageId}.data.spf.IPreferences
 import ${info.packageId}.data.spf.PreferencesImpl
-import ${info.packageId}.data.spf.provideSettings
-import ${info.packageId}.di.qualifiers.NetworkQualifier
-import ${info.packageId}.di.qualifiers.ServiceQualifier
-import ${info.packageId}.domain.dto.AppParamsDTO
-import ${info.packageId}.ui.screen.counter.CounterViewModel
+
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
