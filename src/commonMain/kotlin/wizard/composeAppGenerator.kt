@@ -285,7 +285,7 @@ fun ProjectInfo.generateComposeAppFilesOnlyJvm(): List<ProjectFile> = buildList 
     add(SettingsGradleKts(info))
 
 //    add(ModuleBuildGradleKts(info))
-    add(ModuleBuildGradleKtsOnlyAndroid(info))
+    add(ModuleBuildGradleKtsOnlyPC(info))
     add(ColorKt(info, isOnlyAndroid = true))
     add(ThemeKt(info, isOnlyAndroid = true))
     add(AppKt(info, isOnlyAndroid = true))
