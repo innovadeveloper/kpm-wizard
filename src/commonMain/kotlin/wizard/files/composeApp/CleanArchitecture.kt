@@ -65,9 +65,47 @@ val cleanArchitectureForViewModelOnlyAndroid : (info : ProjectInfo) -> MutableLi
     )
 }
 
+
+/**
+ * crea el set de directorios siguiendo una arquitectura limpia..
+ */
+val cleanArchitectureForViewModelOnlyJvm : (info : ProjectInfo) -> MutableList<ProjectFile> = {info ->
+    mutableListOf<ProjectFile>(
+        GenericDirectoryJvm(info, "di/module", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "di/qualifiers", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "data/file", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "data/network", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "data/repository", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "data/room", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "data/spf", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "di", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/annotations", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/clients", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/constants", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/dto", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/entities", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/service", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "domain/utils", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "infrastructure/business", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "infrastructure/clients", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "infrastructure/extensions", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "infrastructure/providers", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "infrastructure/receivers", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "ui/screen/counter", isOnlyJvm = true),
+        GenericDirectoryJvm(info, "ui/widget", isOnlyJvm = true)
+    )
+}
+
 class GenericDirectory(info: ProjectInfo, pathDirectory : String, isOnlyAndroid: Boolean = false) : ProjectFile {
-//    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep"
+    //    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep"
     override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/$pathDirectory/.gitkeep" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep"
+
+    override val content = "".trimIndent()
+}
+
+class GenericDirectoryJvm(info: ProjectInfo, pathDirectory : String, isOnlyJvm: Boolean = false) : ProjectFile {
+    //    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep"
+    override val path = if(isOnlyJvm) "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/$pathDirectory/.gitkeep"
 
     override val content = "".trimIndent()
 }

@@ -66,7 +66,7 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.cio)
     implementation(libs.sqlDelight.driver.android)
-    implementation("com.abexa.kmp-libraries:shared-kmp-library:1.4.0@aar")
+    implementation("com.abexa.kmp-libraries:shared-kmp-library:1.4.0@aar")  // en android
 
 //    COMMON
     implementation(libs.kotlinx.coroutines.core)
@@ -85,6 +85,64 @@ dependencies {
 }
 """.trimIndent()
 }
+
+
+class FixResourceAppBuildGradleJvm(info: ProjectInfo) : ProjectFile {
+    override val path = "${info.moduleName}/fix_app.build.gradle.kts"
+
+    override val content = """
+import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+plugins {
+    alias(libs.plugins.multiplatform)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.ktorfit)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.sqlDelight)
+}  
+
+kotlin {
+    jvm("desktop")
+    sourceSets {
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktorfit.lib)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.multiplatformSettings)
+
+                implementation("com.abexa.kmp-libraries:shared-kmp-library:1.4.0")
+
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.cio)
+                implementation(libs.sqlDelight.driver.sqlite)
+            }
+            kotlin.srcDir("build/generated/ksp/desktop/desktopMain/kotlin")
+        }
+    }
+}
+""".trimIndent()
+}
+
 
 
 class FixResourceLibToml(info: ProjectInfo) : ProjectFile {
@@ -211,8 +269,9 @@ fun App() {
 """.trimIndent()
 }
 
+
 class AppKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
-//    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
+    //    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
     override val path = if(isOnlyAndroid) "${info.moduleName}/src/main/java/${info.packagePath}/App.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
 
     override val content = """
@@ -317,6 +376,54 @@ class AppKt(info: ProjectInfo, isOnlyAndroid : Boolean = false) : ProjectFile {
             }
         }
         
+    """.trimIndent()
+}
+
+
+class AppKtJvm(info: ProjectInfo, isOnlyJvm : Boolean = false) : ProjectFile {
+    //    override val path = "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
+    override val path = if(isOnlyJvm) "${info.moduleName}/src/desktopMain/kotlin/Main.kt" else "${info.moduleName}/src/commonMain/kotlin/${info.packagePath}/App.kt"
+
+    override val content = """
+        ${if(!isOnlyJvm) """
+        package ${info.packageId}
+        """.trimIndent() else
+        """""".trimIndent()}
+        
+        
+        import androidx.compose.material3.*
+        import androidx.compose.runtime.*
+        import androidx.compose.ui.unit.dp
+        import androidx.compose.ui.window.Window
+        import androidx.compose.ui.window.application
+        import androidx.compose.ui.window.rememberWindowState
+        
+        import ${info.packageId}.di.initKoin
+        import ${info.packageId}.ui.screen.counter.CounterScreenClass
+        import ${info.packageId}.ui.screen.counter.CounterViewModel
+        import org.jetbrains.compose.ui.tooling.preview.Preview
+        import java.awt.Dimension
+        
+        @Composable
+        @Preview
+        fun App() {
+            MaterialTheme {
+                CounterScreenClass().build<CounterViewModel>()
+            }
+        }
+        
+        fun main() = application {
+            initKoin()
+        
+            Window(
+                title = "${info.moduleName}",
+                state = rememberWindowState(width = 800.dp, height = 600.dp),
+                onCloseRequest = ::exitApplication,
+            ) {
+                window.minimumSize = Dimension(350, 600)
+                App()
+            }
+        }
     """.trimIndent()
 }
 
@@ -426,6 +533,34 @@ actual class DatabaseDriverFactory(private val context: Context) : DBDriver {
 }"""}""".trimIndent()
 }
 
+
+class DatabaseDriverFactoryKtJvm(info: ProjectInfo, isOnlyJvm: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyJvm)
+        "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/data/db/DatabaseDriverFactory.android.kt"
+    else
+        "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/db/DatabaseDriverFactory.android.kt"
+
+    override val content = """
+package ${info.packageId}.data.db
+
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import ${info.packageId}.db.MyDatabase
+        ${if(isOnlyJvm) """
+class DatabaseDriverFactory : DBDriver {
+    override fun createDriver(): SqlDriver {
+        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
+            MyDatabase.Schema.create(this)
+        }
+    }
+}""" else """
+actual class DatabaseDriverFactory(private val context: Context) : DBDriver {
+    actual override fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(MyDatabase.Schema, context, "mydatabase.db")
+    }
+}"""}""".trimIndent()
+}
+
 class AndroidPreferencesConfigKt(info: ProjectInfo, isOnlyAndroid: Boolean = false) : ProjectFile {
     override val path = if (isOnlyAndroid)
         "${info.moduleName}/src/main/java/${info.packagePath}/data/spf/PreferencesConfig.android.kt"
@@ -444,6 +579,27 @@ class AndroidPreferencesConfigKt(info: ProjectInfo, isOnlyAndroid: Boolean = fal
         actual fun provideSettings(): Settings {
             val sharedPreferences = AppApplication.appContext.getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
             return SharedPreferencesSettings(sharedPreferences)
+        }
+    """.trimIndent()
+}
+
+
+class DesktopPreferencesConfigKtJvm(info: ProjectInfo, isOnlyJvm: Boolean = false) : ProjectFile {
+    override val path = if (isOnlyJvm)
+        "${info.moduleName}/src/desktopMain/kotlin/${info.packagePath}/data/spf/PreferencesConfig.kt"
+    else
+        "${info.moduleName}/src/androidMain/kotlin/${info.packagePath}/data/spf/PreferencesConfig.kt"
+
+    override val content = """
+        package ${info.packageId}.data.spf
+        
+        import ${info.packageId}.domain.constants.Constants
+        import com.russhwolf.settings.Settings
+        import java.io.File
+        
+        fun provideSettings(): Settings {
+            val file = File(Constants.PREFERENCES_NAME)
+            return FileSettingsProvider(file)
         }
     """.trimIndent()
 }

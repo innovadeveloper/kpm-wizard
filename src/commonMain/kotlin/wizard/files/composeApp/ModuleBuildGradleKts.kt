@@ -86,6 +86,7 @@ class ModuleBuildGradleKts(info: ProjectInfo) : ProjectFile {
             appendLine("    }")
             appendLine("")
         }
+
         appendLine("    sourceSets {")
         if(info.hasPlatform(ProjectPlatform.Jvm))
             appendLine("        val desktopMain by getting")
@@ -618,9 +619,6 @@ class ModuleBuildGradleKtsOnlyPC(info: ProjectInfo) : ProjectFile {
         if (info.hasPlatform(ProjectPlatform.Jvm)) {
             appendLine("import org.jetbrains.compose.desktop.application.dsl.TargetFormat")
         }
-        if (info.hasPlatform(ProjectPlatform.Android)) {
-            appendLine("import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree")
-        }
         appendLine("")
         appendLine("plugins {")
         plugins.forEach { dep ->
@@ -628,62 +626,31 @@ class ModuleBuildGradleKtsOnlyPC(info: ProjectInfo) : ProjectFile {
         }
         appendLine("}")
         appendLine("")
-//        if (info.hasPlatform(ProjectPlatform.Android)) {
-//            appendLine("")
-//            appendLine("android {")
-//            appendLine("    namespace = \"${info.packageId}\"")
-//            appendLine("    compileSdk = ${info.androidTargetSdk}")
-//            appendLine("")
-//            appendLine("    defaultConfig {")
-//            appendLine("        minSdk = ${info.androidMinSdk}")
-//            appendLine("        targetSdk = ${info.androidTargetSdk}")
-//            appendLine("")
-//            appendLine("        applicationId = \"${info.packageId}.androidApp\"")
-//            appendLine("        versionCode = 1")
-//            appendLine("        versionName = \"1.0.0\"")
-//            appendLine("")
-//            appendLine("        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"")
-//            appendLine("    }")
-//            appendLine("")
-//            appendLine("    buildTypes {")
-//            appendLine("        release {")
-//            appendLine("            isMinifyEnabled = false")
-//            appendLine("            proguardFiles(")
-//            appendLine("                getDefaultProguardFile(\"proguard-android-optimize.txt\"),")
-//            appendLine("                \"proguard-rules.pro\"")
-//            appendLine("            )")
-//            appendLine("        }")
-//            appendLine("    }")
-//            appendLine("")
-//            appendLine("    compileOptions {")
-//            appendLine("        sourceCompatibility = JavaVersion.VERSION_17")
-//            appendLine("        targetCompatibility = JavaVersion.VERSION_17")
-//            appendLine("    }")
-//            appendLine("")
-//            appendLine("    kotlinOptions {")
-//            appendLine("        jvmTarget = \"17\"")
-//            appendLine("    }")
-//            appendLine("")
-//            appendLine("    buildFeatures {")
-//            appendLine("        compose = true")
-//            appendLine("    }")
-//            appendLine("}")
-//            appendLine("")
-//            appendLine("//https://developer.android.com/develop/ui/compose/testing#setup")
-//
-//            appendLine("dependencies {")
-//            appendLine("    androidTestImplementation(libs.androidx.uitest.junit4)")
-//            appendLine("    debugImplementation(libs.androidx.uitest.testManifest)")
-//            commonDeps.forEach { dep ->
-//                appendLine("    ${dep.libraryNotation}")
-//            }
-//            otherDeps.forEach { dep ->
-//                if (dep.platforms.contains(ProjectPlatform.Android)) {
-//                    appendLine("    ${dep.libraryNotation}")
-//                }
-//            }
-//            appendLine("}")
-//        }
+
+        // todo continuar de aquí
+
+        appendLine("kotlin {")
+        appendLine("    jvm(\"desktop\")")
+        appendLine("    sourceSets {")
+//        if(info.hasPlatform(ProjectPlatform.Jvm))
+        appendLine("        val desktopMain by getting {")
+        appendLine("            dependencies {")
+        appendLine("                implementation(compose.runtime)")
+        appendLine("                implementation(compose.foundation)")
+        appendLine("                implementation(compose.material3)")
+        appendLine("                implementation(compose.components.resources)")
+        appendLine("                implementation(compose.components.uiToolingPreview)")
+        commonDeps.forEach { dep ->
+            appendLine("                ${dep.libraryNotation}")
+        }
+        appendLine("            }")
+        appendLine("            kotlin.srcDir(\"build/generated/ksp/desktop/desktopMain/kotlin\")")
+        appendLine("        }")
+        appendLine("    }")
+        appendLine("}")
+        appendLine("")
+
+
 
         if (info.hasPlatform(ProjectPlatform.Jvm)) {
             appendLine("")
@@ -738,6 +705,8 @@ class ModuleBuildGradleKtsOnlyPC(info: ProjectInfo) : ProjectFile {
             appendLine("            // Database configuration here.")
             appendLine("            // https://cashapp.github.io/sqldelight")
             appendLine("            packageName.set(\"${info.packageId}.db\")")
+            appendLine("            srcDirs.setFrom(\"src/desktopMain/sqldelight\")")
+
             appendLine("        }")
             appendLine("    }")
             appendLine("}")
